@@ -14,13 +14,7 @@ import android.util.Log
 import com.pavesid.playermusic.models.Song
 
 
-class MusicService : Service()//, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
-    //MediaPlayer.OnCompletionListener {
-    {//}
-
-    companion object {
-        private val NOTIFY_ID = 1
-    }
+class MusicService : Service() {
 
     private var songPos = 0
     private lateinit var songs: List<Song>
@@ -61,18 +55,7 @@ class MusicService : Service()//, MediaPlayer.OnPreparedListener, MediaPlayer.On
 ////
 ////        startForeground(NOTIFY_ID, not)
 //    }
-//
-//    override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
-//        mp.reset()
-//        return false
-//    }
-//
-//    override fun onCompletion(mp: MediaPlayer) {
-//        if(player.currentPosition > 0) {
-//            mp.reset()
-//            playNext()
-//        }
-//    }
+
 
     override fun onCreate() {
         super.onCreate()
@@ -125,20 +108,20 @@ class MusicService : Service()//, MediaPlayer.OnPreparedListener, MediaPlayer.On
         Log.d("M_Play()", "$songPos")
     }
 
-    fun setSong(songPos: Int) {
+    fun setSongPos(songPos: Int) {
         Log.d("M_ff", "$songPos")
         this.songPos = songPos
     }
 
-    fun getPos(): Int {
+    fun getCurrentPosition(): Int {
         return player.currentPosition
     }
 
-    fun getDur(): Int {
+    fun getDuration(): Int {
         return player.duration
     }
 
-    fun isPng(): Boolean {
+    fun isPlaying(): Boolean {
         return player.isPlaying
     }
 
@@ -146,11 +129,11 @@ class MusicService : Service()//, MediaPlayer.OnPreparedListener, MediaPlayer.On
         player.pause()
     }
 
-    fun seek(pos: Int) {
+    fun seekTo(pos: Int) {
         player.seekTo(pos)
     }
 
-    fun go() {
+    fun start() {
         player.start()
     }
 

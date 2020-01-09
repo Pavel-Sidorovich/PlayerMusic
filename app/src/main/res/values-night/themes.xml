@@ -1,2 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+
+        <item name="colorPrimaryDark">@color/color_title_night</item>
+        <item name="colorPrimary">@color/color_title_night</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorTitleSong">@color/color_title_day</item>
+        <item name="colorAuthorSong">@color/color_author_day</item>
+        <item name="colorBackground">@color/color_background_night</item>
+        <item name="colorBackgroundImage">@color/color_background_image</item>
+        <item name="colorMusicNote">@color/color_music_note</item>
+        <item name="colorEditTextColor">@color/color_background_day</item>
+        <item name="colorTextColorHint">@color/color_author_day</item>
+        <item name="colorDivider">@color/color_author_day</item>
+    </style>
+</resources>

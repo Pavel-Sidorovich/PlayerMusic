@@ -5,7 +5,10 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="color_title_day">#767676</color>
+    <color name="color_title_night">#1b1b1b</color>
     <color name="color_author_day">#b9b9b9</color>
     <color name="color_background_day">#ffffff</color>
+    <color name="color_background_night">#1b1b1b</color>
     <color name="color_music_note">#bbaacc</color>
+    <color name="color_background_image">#d8d2de</color>
 </resources>

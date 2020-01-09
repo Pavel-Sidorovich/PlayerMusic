@@ -56,7 +56,7 @@ class MainFragment : Fragment() {
         initViews(view)
         Log.d("M_onCreateView", "${songList.size}")
 //        initViewModel()
-        setController()
+//        setController()
         return view
     }
 
@@ -91,13 +91,13 @@ class MainFragment : Fragment() {
     private fun initViews( view: View) {
 
         songAdapter = SongAdapter {
-            musicService!!.setSong(Integer.parseInt(it.tag.toString()))
+            musicService!!.setSongPos(Integer.parseInt(it.tag.toString()))
             musicService!!.playSong()
             if(playbackPaused){
-                setController()
+//                setController()
                 playbackPaused=false
             }
-            controller!!.show(0)
+//            controller!!.show(0)
         }
         Log.d("M_initViews", "${songList.size}")
 //        songAdapter.updateData(songList)
@@ -115,8 +115,10 @@ class MainFragment : Fragment() {
 
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-        viewModel.getSongData().observe(this, Observer { songList = ArrayList(it) })
-        viewModel.getSongData().observe(this, Observer { songAdapter.updateData(it) })
+//        viewModel.getSongData().observe(this, Observer { songList = ArrayList(it) })
+        viewModel.getSongData().observe(this, Observer {
+            songAdapter.updateData(it)
+            songList = ArrayList(it)})
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -127,17 +129,17 @@ class MainFragment : Fragment() {
         Log.d("M_onAct1", "${songList.size}")
     }
 
-    private fun setController() {
-        controller = MusicController(this.context)
-
-        controller!!.setPrevNextListeners(
-            { playNext() },
-            { playPrev() })
-
-        controller!!.setMediaPlayer(playerControl())
-        controller!!.setAnchorView(song_list)
-        controller!!.isEnabled = true
-    }
+//    private fun setController() {
+//        controller = MusicController(this.context)
+//
+//        controller!!.setPrevNextListeners(
+//            { playNext() },
+//            { playPrev() })
+//
+//        controller!!.setMediaPlayer(playerControl())
+//        controller!!.setAnchorView(song_list)
+//        controller!!.isEnabled = true
+//    }
 
     private val musicConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -181,73 +183,63 @@ class MainFragment : Fragment() {
         super.onDestroy()
     }
 
-    fun songPicked(view: View) {
-        musicService!!.setSong(Integer.parseInt(view.tag.toString()))
-        musicService!!.playSong()
-        if(playbackPaused){
-            setController()
-            playbackPaused=false
-        }
-        controller!!.show(0)
-    }
-
     private fun playNext() {
         musicService!!.playNext()
         if(playbackPaused) {
-            setController()
+//            setController()
             playbackPaused=false
         }
-        controller!!.show(0)
+//        controller!!.show(0)
     }
 
     private fun playPrev() {
         musicService!!.playPrev()
         if(playbackPaused){
-            setController()
+//            setController()
             playbackPaused = false
         }
-        controller!!.show(0)
+//        controller!!.show(0)
     }
 
-    inner class playerControl: MediaController.MediaPlayerControl {
-        override fun isPlaying(): Boolean =
-            if (musicService != null && musicBound) {
-                musicService!!.isPng()
-            } else false
-
-        override fun canSeekForward(): Boolean = true
-
-        override fun getDuration(): Int =
-            if (musicService != null && musicBound && musicService!!.isPng()) {
-                musicService!!.getDur()
-            } else 0
-
-        override fun pause() {
-            playbackPaused = true
-            musicService!!.pausePlayer()
-        }
-
-        override fun getBufferPercentage(): Int = 0
-
-        override fun seekTo(pos: Int) {
-            musicService!!.seek(pos)
-        }
-
-        override fun getCurrentPosition(): Int =
-            if (musicService != null && musicBound && musicService!!.isPng()) {
-                musicService!!.getPos()
-            } else 0
-
-        override fun canSeekBackward(): Boolean = true
-
-        override fun start() {
-            musicService!!.go()
-        }
-
-        override fun getAudioSessionId(): Int = 0
-
-        override fun canPause(): Boolean = true
-    }
+//    inner class playerControl: MediaController.MediaPlayerControl {
+//        override fun isPlaying(): Boolean =
+//            if (musicService != null && musicBound) {
+//                musicService!!.isPlaying()
+//            } else false
+//
+//        override fun canSeekForward(): Boolean = true
+//
+//        override fun getDuration(): Int =
+//            if (musicService != null && musicBound && musicService!!.isPlaying()) {
+//                musicService!!.getDuration()
+//            } else 0
+//
+//        override fun pause() {
+//            playbackPaused = true
+//            musicService!!.pausePlayer()
+//        }
+//
+//        override fun getBufferPercentage(): Int = 0
+//
+//        override fun seekTo(pos: Int) {
+//            musicService!!.seekTo(pos)
+//        }
+//
+//        override fun getCurrentPosition(): Int =
+//            if (musicService != null && musicBound && musicService!!.isPlaying()) {
+//                musicService!!.getCurrentPosition()
+//            } else 0
+//
+//        override fun canSeekBackward(): Boolean = true
+//
+//        override fun start() {
+//            musicService!!.start()
+//        }
+//
+//        override fun getAudioSessionId(): Int = 0
+//
+//        override fun canPause(): Boolean = true
+//    }
 
     override fun onPause() {
 
@@ -260,13 +252,13 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if(paused) {
-            setController()
+//            setController()
             paused = false
         }
     }
 
     override fun onStop() {
-        controller!!.hide()
+//        controller!!.hide()
         super.onStop()
     }
 

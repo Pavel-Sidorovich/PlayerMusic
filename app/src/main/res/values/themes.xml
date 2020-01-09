@@ -9,6 +9,7 @@
         <item name="colorTitleSong">@color/color_title_day</item>
         <item name="colorAuthorSong">@color/color_author_day</item>
         <item name="colorBackground">@color/color_background_day</item>
+        <item name="colorBackgroundImage">@color/color_background_image</item>
         <item name="colorMusicNote">@color/color_music_note</item>
         <item name="colorEditTextColor">@color/color_background_day</item>
         <item name="colorTextColorHint">@color/color_author_day</item>

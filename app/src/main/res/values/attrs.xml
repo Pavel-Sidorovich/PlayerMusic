@@ -3,6 +3,7 @@
     <attr name="colorTitleSong" format="reference"/>
     <attr name="colorAuthorSong" format="reference"/>
     <attr name="colorBackground" format="reference"/>
+    <attr name="colorBackgroundImage" format="reference"/>
     <attr name="colorMusicNote" format="reference"/>
     <attr name="colorEditTextColor" format="reference"/>
     <attr name="colorTextColorHint" format="reference"/>

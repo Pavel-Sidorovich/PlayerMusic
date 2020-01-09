@@ -58,7 +58,7 @@ class SongAdapter(private val listener: (View)-> Unit) : RecyclerView.Adapter<So
 //            }
             itemView.tv_title_song.text = song.title
             itemView.tv_author_song.text = "${song.artist} | ${song.album}"
-            itemView.iv_image_song.setBackgroundColor(getColorFromAttr(R.attr.colorBackground, itemView.context.theme))
+            itemView.iv_image_song.setBackgroundColor(getColorFromAttr(R.attr.colorBackgroundImage, itemView.context.theme))
             itemView.iv_image_song.setImageResource(R.drawable.ic_music_note_black_24dp)
             itemView.setOnClickListener { listener.invoke(it) }
             Log.d("M_OnBind", "${itemView.tag}")
