@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">PlayerMusic</string>
-    <string name="end">End</string>
-    <string name="shuffle">Shuffle</string>
+    <string name="end">Конец</string>
+    <string name="shuffle">Перемешать</string>
+    <string name="search_song_hint">Введите название песни для поиска</string>
+    <string name="dialog_body">Разрешите доступ к памяти для возможности воспроизведения музыки с вашего телефона</string>
+    <string name="dialog_title">Требуется доступ</string>
+    <string name="dialog_later">Позже</string>
+    <string name="dialog_ok">Разрешить</string>
+    <string name="recent">Недавние</string>
+    <string name="favorites">Избранные</string>
+    <string name="playlists">Плейлисты</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

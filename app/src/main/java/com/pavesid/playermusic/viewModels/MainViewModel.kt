@@ -1,25 +1,24 @@
-package com.pavesid.playermusic
+package com.pavesid.playermusic.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
+import com.pavesid.playermusic.models.Song
+import com.pavesid.playermusic.extensions.mutableLiveData
+import com.pavesid.playermusic.repository.Repository
 
 
-class MainViewModel(var app: Application) : AndroidViewModel(app) {
+class MainViewModel(private var app: Application) : AndroidViewModel(app) {
     private lateinit var songs: MutableLiveData<List<Song>>
-    init {
 
+    init {
         initSongs()
-        Log.d("M_fd", "${songs.value?.size}")
     }
 
     private val query = mutableLiveData("")
-//    private var songs = Repository(app).getSongData()
 
-    fun initSongs() {
+    private fun initSongs() {
         songs = Repository(app).getSongData()
     }
-
 
     fun handleSearchQuery(text: String?) {
         query.value = text
@@ -28,16 +27,14 @@ class MainViewModel(var app: Application) : AndroidViewModel(app) {
     fun getSongData(): LiveData<List<Song>> {
         val result = MediatorLiveData<List<Song>>()
 
-        Log.d("M_View", "fdf")
-
         val filterF = {
             val queryStr = query.value!!
-            val chatItem = songs.value!!
+            val songItem = songs.value!!
 
             result.value = if (queryStr.isEmpty()) {
-                chatItem
+                songItem
             } else {
-                chatItem.filter { it.title.contains(queryStr, true) }
+                songItem.filter { it.title.contains(queryStr, true) }
             }
         }
 

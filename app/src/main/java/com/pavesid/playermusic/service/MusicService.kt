@@ -1,8 +1,5 @@
-package com.pavesid.playermusic
+package com.pavesid.playermusic.service
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.PendingIntent
 import android.app.Service
 import android.content.ContentUris
 import android.content.Intent
@@ -14,6 +11,7 @@ import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import android.util.Log
+import com.pavesid.playermusic.models.Song
 
 
 class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
@@ -70,7 +68,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
 
     override fun onCompletion(mp: MediaPlayer) {
         if(player.currentPosition > 0) {
-            mp.reset()
+//            mp.reset()
             playNext()
         }
     }
@@ -98,7 +96,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     fun playSong(playSong: Song) {
-        player.reset()
+//        player.reset()
 //        val playSong = songs[songPos]
 
         songTitle = playSong.title
@@ -113,7 +111,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     fun playSong() {
-        player.reset()
+//        player.reset()
         val playSong = songs[songPos]
 
         songTitle = playSong.title

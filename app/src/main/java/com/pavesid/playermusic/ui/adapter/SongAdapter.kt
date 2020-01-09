@@ -1,4 +1,4 @@
-package com.pavesid.playermusic
+package com.pavesid.playermusic.ui.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.pavesid.playermusic.R
+import com.pavesid.playermusic.models.Song
+import com.pavesid.playermusic.utils.Utils.getColorFromAttr
+import kotlinx.android.synthetic.main.item_song_single.view.*
 import kotlinx.android.synthetic.main.song.view.*
 
 
@@ -14,13 +18,16 @@ class SongAdapter(private val listener: (Song)-> Unit) : RecyclerView.Adapter<So
     var items: List<Song> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
+        Log.d("M_ViewHolder", "${items.size}")
         val inflater = LayoutInflater.from(parent.context)
-        return SongViewHolder(inflater.inflate(R.layout.song, parent, false))
+        Log.d("M_ViewHolder", "2 - ${items.size}")
+        return SongViewHolder(inflater.inflate(R.layout.item_song_single, parent, false))
     }
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
+        Log.d("M_ViewHolder", "${items[position]}")
         holder.bind(items[position], listener)
     }
 
@@ -38,20 +45,23 @@ class SongAdapter(private val listener: (Song)-> Unit) : RecyclerView.Adapter<So
         }
 
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        Log.d("M_update", "${items.size}")
 
         items = data
-        Log.d("M_update", "${items.size}")
         diffResult.dispatchUpdatesTo(this)
     }
 
     inner class SongViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(song: Song, listener: (Song)-> Unit) {
-            itemView.song_title.text = song.title
-            itemView.song_album.text = song.album
-            itemView.song_artist.text = song.artist
-            itemView.setOnClickListener { listener.invoke(song) }
+        init{
+            Log.d("M_InViewH", "ff")
         }
-
+        fun bind(song: Song, listener: (Song)-> Unit) {
+            Log.d("M_OnBind", "start")
+            itemView.tv_title_song.text = song.title
+            itemView.tv_author_song.text = "${song.artist}|${song.album}"
+            itemView.iv_image_song.setBackgroundColor(getColorFromAttr(R.attr.colorBackground, itemView.context.theme))
+            itemView.iv_image_song.setImageResource(R.drawable.ic_music_note_black_24dp)
+            itemView.setOnClickListener { listener.invoke(song) }
+            Log.d("M_OnBind", "end")
+        }
     }
 }

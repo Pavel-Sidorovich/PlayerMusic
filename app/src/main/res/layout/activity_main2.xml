@@ -23,9 +23,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <fragment
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/song_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="com.pavesid.playermusic.MainFragment"/>
+        tools:listitem="@layout/song">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

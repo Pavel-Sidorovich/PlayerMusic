@@ -1,4 +1,4 @@
-package com.pavesid.playermusic
+package com.pavesid.playermusic.models
 
 data class Song(var id: Long,
                 var title: String,

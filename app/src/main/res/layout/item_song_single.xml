@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_size"
+    android:padding="@dimen/spacing_normal_16"
+    android:background="?attr/colorBackground">
+
+    <ImageView
+        android:id="@+id/iv_image_song"
+        android:layout_width="@dimen/avatar_item_size"
+        android:layout_height="@dimen/avatar_item_size"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/tv_title_song"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="chat title"
+        android:textColor="?attr/colorTitleSong"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="14sp"
+        android:layout_toEndOf="@id/iv_image_song"
+        android:layout_marginLeft="@dimen/spacing_normal_16"
+        android:layout_marginRight="@dimen/spacing_normal_16"/>
+
+    <TextView
+        android:id="@+id/tv_author_song"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Sbbb"
+        android:textColor="?attr/colorAuthorSong"
+        android:textSize="14sp"
+        android:layout_toEndOf="@id/iv_image_song"
+        android:layout_marginLeft="@dimen/spacing_normal_16"
+        android:layout_marginRight="@dimen/spacing_normal_16"
+        android:layout_below="@id/tv_title_song"/>
+
+</RelativeLayout>

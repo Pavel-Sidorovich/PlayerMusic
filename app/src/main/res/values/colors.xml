@@ -3,4 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="color_title_day">#767676</color>
+    <color name="color_author_day">#b9b9b9</color>
+    <color name="color_background_day">#ffffff</color>
+    <color name="color_music_note">#bbaacc</color>
 </resources>

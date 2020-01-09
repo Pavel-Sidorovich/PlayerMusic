@@ -14,11 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".MusicService"
+            android:name=".service.MusicService"
             android:enabled="true"
             android:exported="true"></service>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

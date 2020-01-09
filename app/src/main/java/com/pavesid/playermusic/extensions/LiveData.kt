@@ -1,4 +1,4 @@
-package com.pavesid.playermusic
+package com.pavesid.playermusic.extensions
 
 import androidx.lifecycle.MutableLiveData
 
