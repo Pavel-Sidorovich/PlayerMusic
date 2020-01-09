@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_end -> {
                 Log.d("M_OpIt", "Act")
-                exitProcess(0)
+//                exitProcess(0)
             }
         }
         return false

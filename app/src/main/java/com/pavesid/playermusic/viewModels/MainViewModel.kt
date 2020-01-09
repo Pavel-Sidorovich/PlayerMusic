@@ -18,7 +18,6 @@ class MainViewModel(private var app: Application) : AndroidViewModel(app) {
     private val query = mutableLiveData("")
 
     private fun initSongs() {
-        Log.d("M_MVM", "fg")
         songs = Repository(app).getSongData()
     }
 
@@ -27,6 +26,7 @@ class MainViewModel(private var app: Application) : AndroidViewModel(app) {
     }
 
     fun getSongData(): LiveData<List<Song>> {
+        Log.d("M_ getSongData()", "${songs.value?.size}")
         val result = MediatorLiveData<List<Song>>()
 
         val filterF = {

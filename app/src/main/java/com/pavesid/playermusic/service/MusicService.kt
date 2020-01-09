@@ -23,7 +23,7 @@ class MusicService : Service()//, MediaPlayer.OnPreparedListener, MediaPlayer.On
     }
 
     private var songPos = 0
-    private lateinit var songs: ArrayList<Song>
+    private lateinit var songs: List<Song>
     private val player = MediaPlayer()
     private val musicBind = MusicBinder()
     private var songTitle = ""
@@ -80,48 +80,38 @@ class MusicService : Service()//, MediaPlayer.OnPreparedListener, MediaPlayer.On
     }
 
     private fun initMusicPlayer() {
-        player.setWakeMode(applicationContext, PowerManager.PARTIAL_WAKE_LOCK)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            player.setAudioAttributes(AudioAttributes.Builder().setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
-        } else {
-            player.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        }
+        player.apply {
+            setWakeMode(applicationContext, PowerManager.PARTIAL_WAKE_LOCK)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setAudioAttributes(AudioAttributes.Builder().setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
+            } else {
+                setAudioStreamType(AudioManager.STREAM_MUSIC)
+            }
 
-        player.setOnPreparedListener { mp -> mp.start() }
-        player.setOnCompletionListener{ mp ->
-            if(player.currentPosition > 0) {
+            setOnPreparedListener { mp -> mp.start() }
+            setOnCompletionListener { mp ->
+                if (player.currentPosition > 0) {
+                    mp.reset()
+                    playNext()
+                }
+            }
+            setOnErrorListener { mp, _, _ ->
                 mp.reset()
-                playNext()
+                false
             }
         }
-        player.setOnErrorListener { mp, _, _ ->
-            mp.reset()
-            false
-        }
     }
 
-    fun setList(songs: ArrayList<Song>) {
+    fun setList(songs: List<Song>) {
         this.songs = songs
-    }
-
-    fun playSong(playSong: Song) {
-        player.reset()
-//        val playSong = songs[songPos]
-
-        songTitle = playSong.title
-        val currSong = playSong.id
-        val trackUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currSong)
-        try {
-            player.setDataSource(applicationContext, trackUri)
-        } catch (e: Exception) {
-            Log.e("My_Music_Service", "Error setting data source", e)
-        }
-        player.prepareAsync()
     }
 
     fun playSong() {
         player.reset()
+        Log.d("M_ff", "$songPos")
+        Log.d("M_ff", "${songs.size}")
         val playSong = songs[songPos]
+        Log.d("M_ff", "$playSong")
 
         songTitle = playSong.title
         val currSong = playSong.id
@@ -132,9 +122,11 @@ class MusicService : Service()//, MediaPlayer.OnPreparedListener, MediaPlayer.On
             Log.e("My_Music_Service", "Error setting data source", e)
         }
         player.prepareAsync()
+        Log.d("M_Play()", "$songPos")
     }
 
     fun setSong(songPos: Int) {
+        Log.d("M_ff", "$songPos")
         this.songPos = songPos
     }
 

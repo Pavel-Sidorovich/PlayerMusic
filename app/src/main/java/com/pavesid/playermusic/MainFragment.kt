@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pavesid.playermusic.models.Song
 import com.pavesid.playermusic.service.MusicService
@@ -37,20 +38,25 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("M_MainFr", "4")
         setHasOptionsMenu(true)
-        setController()
-        Log.d("M_MainFr", "5")
+        initViewModel()
+
+//        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+//        viewModel.getSongData().observe(this, Observer { songAdapter.updateData(it) })
+
+        Log.d("M_onCreate", "${songList.size}")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("M_MainFr", "2")
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         initViews(view)
+        Log.d("M_onCreateView", "${songList.size}")
+//        initViewModel()
+        setController()
         return view
     }
 
@@ -79,25 +85,22 @@ class MainFragment : Fragment() {
                 return true
             }
         })
-        Log.d("M_MM", "2")
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun initViews( view: View) {
-        Log.d("M_MainFr", "22")
 
         songAdapter = SongAdapter {
-//            musicService!!.setSong(it)
-            musicService!!.playSong(it)
+            musicService!!.setSong(Integer.parseInt(it.tag.toString()))
+            musicService!!.playSong()
             if(playbackPaused){
                 setController()
                 playbackPaused=false
             }
             controller!!.show(0)
         }
-        Log.d("M_MainFr", "23")
-        songAdapter.updateData(songList)
-        Log.d("M_MainFr", "24")
+        Log.d("M_initViews", "${songList.size}")
+//        songAdapter.updateData(songList)
         val dividerItemDecorator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             MyDividerItemDecorator(resources.getDrawable(R.drawable.divider, context!!.theme))
         } else {
@@ -105,19 +108,23 @@ class MainFragment : Fragment() {
         }
         with(view.song_list) {
             adapter = songAdapter
-            Log.d("M_MainFr", "27")
             layoutManager = LinearLayoutManager(this@MainFragment.context)
-            Log.d("M_MainFr", "28")
             addItemDecoration(dividerItemDecorator)
         }
-        Log.d("M_MainFr", "25")
+    }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+        viewModel.getSongData().observe(this, Observer { songList = ArrayList(it) })
+        viewModel.getSongData().observe(this, Observer { songAdapter.updateData(it) })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-        viewModel.getSongData().observe(this, Observer { songAdapter.updateData(it) })
+//        initViewModel()
+
+        Log.d("M_onAct1", "${songList.size}")
     }
 
     private fun setController() {
@@ -140,6 +147,7 @@ class MainFragment : Fragment() {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MusicService.MusicBinder
             musicService = binder.service
+            Log.d("M_Ser", "${songList.size}")
             musicService!!.setList(songList)
             musicBound = true
         }
@@ -148,33 +156,28 @@ class MainFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        Log.d("M_OnStart", "Start")
-//        setHasOptionsMenu(true)
         if (playIntent == null) {
             playIntent = Intent(this.context, MusicService::class.java)
             this.context!!.bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE)
             this.context!!.startService(playIntent)
         }
-        Log.d("M_OnStart", "End")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("M_MM", "4")
         when (item.itemId) {
             R.id.action_end -> {
+                Log.d("M_onOptionsItemSeletedF", "1")
                 this.context!!.stopService(playIntent)
                 musicService = null
                 exitProcess(0)
             }
         }
-        return false//super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onDestroy() {
-        Log.d("M_OnDestroy", "Start")
         this.context!!.stopService(playIntent)
         musicService = null
-        Log.d("M_OnDestroy", "End")
         super.onDestroy()
     }
 
