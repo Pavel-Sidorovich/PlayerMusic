@@ -1,34 +1,28 @@
 package com.pavesid.playermusic
 
-import android.Manifest
 import android.content.*
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.*
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.MediaController
-import androidx.fragment.app.Fragment
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.pavesid.playermusic.models.Song
 import com.pavesid.playermusic.service.MusicService
 import com.pavesid.playermusic.ui.adapter.SongAdapter
+import com.pavesid.playermusic.utils.Utils
 import com.pavesid.playermusic.viewModels.MainViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlin.system.exitProcess
 
 class MainFragment : Fragment(), MediaController.MediaPlayerControl {
-    private val REQUEST_READ_STORAGE_PERMISSION = 1
     var songList: ArrayList<Song> = arrayListOf()
     private var musicService: MusicService? = null
     private var playIntent: Intent? = null
@@ -42,9 +36,10 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("M_MainFr", "1")
-        initViews()
-        initViewModel()
+        Log.d("M_MainFr", "4")
+        setHasOptionsMenu(true)
+        setController()
+        Log.d("M_MainFr", "5")
     }
 
     override fun onCreateView(
@@ -53,13 +48,24 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
     ): View? {
         Log.d("M_MainFr", "2")
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
+        initViews(view)
+        return view
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main, menu)
-        val searchItem = menu?.findItem(R.id.app_bar_search)
-        val searchView = searchItem?.actionView as SearchView
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {
+        val searchItem = menu.findItem(R.id.app_bar_search)
+        val searchView = searchItem.actionView as SearchView
+
+        val searchEditText =
+            searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
+        searchEditText.setTextColor(Utils.getColorFromAttr(R.attr.colorEditTextColor, context!!.theme))
+        searchEditText.setHintTextColor(Utils.getColorFromAttr(R.attr.colorTextColorHint, context!!.theme))
+
+        val searchCloseIcon =
+            searchView.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
+        searchCloseIcon.setImageResource(R.drawable.ic_clear_white_24dp)
+
         searchView.queryHint = getString(R.string.search_song_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -72,108 +78,34 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
                 return true
             }
         })
-        return super.onCreateOptionsMenu(menu, inflater)
+        Log.d("M_MM", "2")
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
-//    private fun initToolbar() {
-//        setSupportActionBar(toolbar)
-//    }
-
-    private fun initViews() {
+    private fun initViews( view: View) {
+        Log.d("M_MainFr", "22")
 
         songAdapter = SongAdapter {
             musicService!!.playSong(it)
         }
-
+        Log.d("M_MainFr", "23")
         songAdapter.updateData(songList)
-
-        with(song_list) {
+        Log.d("M_MainFr", "24")
+        with(view.song_list) {
             adapter = songAdapter
+            Log.d("M_MainFr", "27")
             layoutManager = LinearLayoutManager(this@MainFragment.context)
+            Log.d("M_MainFr", "28")
         }
+        Log.d("M_MainFr", "25")
     }
 
-    private fun initViewModel() {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         viewModel.getSongData().observe(this, Observer { songAdapter.updateData(it) })
     }
-
-//    private fun checkPermission(): Boolean {
-//        val permissionReadStorage =
-//            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-//        return permissionReadStorage == PackageManager.PERMISSION_GRANTED
-//    }
-//
-//    private fun requestPermission() {
-//        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-//            this,
-//            Manifest.permission.READ_EXTERNAL_STORAGE
-//        )
-//        if (shouldProvideRationale) {
-//            showAlertDialog(R.string.dialog_body,
-//                R.string.dialog_later,
-//                DialogInterface.OnClickListener { _, _ -> exitProcess(0) },
-//                R.string.dialog_ok,
-//                DialogInterface.OnClickListener { _, _ ->
-//                    ActivityCompat.requestPermissions(
-//                        this,
-//                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-//                        REQUEST_READ_STORAGE_PERMISSION
-//                    )})
-//        } else {
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-//                REQUEST_READ_STORAGE_PERMISSION
-//            )
-//        }
-//    }
-//
-//    private fun showAlertDialog(@StringRes mainText: Int, @StringRes actionNegative: Int, listenerNegative: DialogInterface.OnClickListener, @StringRes actionPositive: Int, listenerPositive: DialogInterface.OnClickListener) {
-//        val ad = AlertDialog.Builder(this)
-//        ad.setTitle(R.string.dialog_title)
-//        ad.setMessage(mainText)
-//        ad.setNegativeButton(
-//            actionNegative, listenerNegative
-//        )
-//        ad.setPositiveButton(
-//            actionPositive,  listenerPositive
-//        )
-//        ad.setCancelable(false)
-//        ad.show()
-//    }
-//
-//    private fun showSnackBar(@StringRes mainText: Int, action: String, listener: View.OnClickListener) {
-//        Snackbar.make(
-//            findViewById(android.R.id.content),
-//            mainText,
-//            Snackbar.LENGTH_INDEFINITE
-//        )
-//            .setAction(action, listener)
-//            .show()
-//    }
-//
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        when (requestCode) {
-//            REQUEST_READ_STORAGE_PERMISSION -> {
-//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                    initToolbar()
-//                    initViews()
-//                    initViewModel()
-//                } else {
-//                    showSnackBar(R.string.dialog_body, "Ok", View.OnClickListener {
-//                        exitProcess(0)
-//                    })
-//                }
-//            }
-//        }
-//    }
 
     private fun setController() {
         controller = MusicController(this.context)
@@ -204,6 +136,7 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
     override fun onStart() {
         super.onStart()
         Log.d("M_OnStart", "Start")
+//        setHasOptionsMenu(true)
         if (playIntent == null) {
             playIntent = Intent(this.context, MusicService::class.java)
             this.context!!.bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE)
@@ -213,6 +146,7 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d("M_MM", "4")
         when (item.itemId) {
             R.id.action_end -> {
                 this.context!!.stopService(playIntent)
@@ -220,7 +154,7 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
                 exitProcess(0)
             }
         }
-        return super.onOptionsItemSelected(item)
+        return false//super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
@@ -317,8 +251,6 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
         controller!!.hide()
         super.onStop()
     }
-
-
 
     companion object {
         @JvmStatic

@@ -68,7 +68,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
 
     override fun onCompletion(mp: MediaPlayer) {
         if(player.currentPosition > 0) {
-//            mp.reset()
+            mp.reset()
             playNext()
         }
     }
@@ -96,7 +96,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     fun playSong(playSong: Song) {
-//        player.reset()
+        player.reset()
 //        val playSong = songs[songPos]
 
         songTitle = playSong.title
@@ -111,7 +111,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     fun playSong() {
-//        player.reset()
+        player.reset()
         val playSong = songs[songPos]
 
         songTitle = playSong.title

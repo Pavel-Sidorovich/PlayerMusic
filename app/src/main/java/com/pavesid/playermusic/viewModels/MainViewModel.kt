@@ -1,6 +1,7 @@
 package com.pavesid.playermusic.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.pavesid.playermusic.models.Song
 import com.pavesid.playermusic.extensions.mutableLiveData
@@ -17,6 +18,7 @@ class MainViewModel(private var app: Application) : AndroidViewModel(app) {
     private val query = mutableLiveData("")
 
     private fun initSongs() {
+        Log.d("M_MVM", "fg")
         songs = Repository(app).getSongData()
     }
 

@@ -22,6 +22,7 @@ class Repository(private val application: Application) {
     }
 
     private fun getSongs(): List<Song> {
+        Log.d("M_GETTER", "hjh")
         val list = mutableListOf<Song>()
         val musicResolver = application.contentResolver
         val musicUri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
