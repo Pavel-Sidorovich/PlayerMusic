@@ -14,8 +14,9 @@ import android.util.Log
 import com.pavesid.playermusic.models.Song
 
 
-class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
-    MediaPlayer.OnCompletionListener {
+class MusicService : Service()//, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
+    //MediaPlayer.OnCompletionListener {
+    {//}
 
     companion object {
         private val NOTIFY_ID = 1
@@ -37,41 +38,41 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
         return false
     }
 
-    override fun onPrepared(mp: MediaPlayer) {
-        mp.start()
-
-//        val notIntent = Intent(this, MainActivity::class.java)
-//        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        val pendInt = PendingIntent.getActivity(this, 0, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//    override fun onPrepared(mp: MediaPlayer) {
+//        mp.start()
 //
-//        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            Notification.Builder(this, NotificationChannel.DEFAULT_CHANNEL_ID)
-//        } else {
-//            Notification.Builder(this)
+////        val notIntent = Intent(this, MainActivity::class.java)
+////        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////        val pendInt = PendingIntent.getActivity(this, 0, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+////
+////        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+////            Notification.Builder(this, NotificationChannel.DEFAULT_CHANNEL_ID)
+////        } else {
+////            Notification.Builder(this)
+////        }
+////
+////        builder.setContentIntent(pendInt)
+////            .setSmallIcon(R.drawable.ic_play_arrow_black_24dp)
+////            .setTicker(songTitle)
+////            .setOngoing(true)
+////            .setContentTitle("Playing")
+////        .setContentText(songTitle)
+////        val not = builder.build()
+////
+////        startForeground(NOTIFY_ID, not)
+//    }
+//
+//    override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
+//        mp.reset()
+//        return false
+//    }
+//
+//    override fun onCompletion(mp: MediaPlayer) {
+//        if(player.currentPosition > 0) {
+//            mp.reset()
+//            playNext()
 //        }
-//
-//        builder.setContentIntent(pendInt)
-//            .setSmallIcon(R.drawable.ic_play_arrow_black_24dp)
-//            .setTicker(songTitle)
-//            .setOngoing(true)
-//            .setContentTitle("Playing")
-//        .setContentText(songTitle)
-//        val not = builder.build()
-//
-//        startForeground(NOTIFY_ID, not)
-    }
-
-    override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
-        mp.reset()
-        return false
-    }
-
-    override fun onCompletion(mp: MediaPlayer) {
-        if(player.currentPosition > 0) {
-            mp.reset()
-            playNext()
-        }
-    }
+//    }
 
     override fun onCreate() {
         super.onCreate()
@@ -86,9 +87,17 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
             player.setAudioStreamType(AudioManager.STREAM_MUSIC)
         }
 
-        player.setOnPreparedListener(this)
-        player.setOnCompletionListener(this)
-        player.setOnErrorListener(this)
+        player.setOnPreparedListener { mp -> mp.start() }
+        player.setOnCompletionListener{ mp ->
+            if(player.currentPosition > 0) {
+                mp.reset()
+                playNext()
+            }
+        }
+        player.setOnErrorListener { mp, _, _ ->
+            mp.reset()
+            false
+        }
     }
 
     fun setList(songs: ArrayList<Song>) {

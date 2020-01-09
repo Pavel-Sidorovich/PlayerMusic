@@ -6,6 +6,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.pavesid.playermusic.R
 import com.pavesid.playermusic.models.Song
 import com.pavesid.playermusic.extensions.mutableLiveData
 
@@ -40,12 +41,15 @@ class Repository(private val application: Application) {
             val isMusic =
                 musicCursor.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC)
             //add songs to list
+            val temp: ArrayList<String?> = arrayListOf("0", null, "unknown", "<unknown>")
             do {
                 if (musicCursor.getString(isMusic) != null) {
                     val thisId = musicCursor.getLong(idColumn)
                     val thisTitle = musicCursor.getString(titleColumn)
-                    val thisArtist = musicCursor.getString(artistColumn)
-                    val thisAlbum = musicCursor.getString(albumColumn)
+                    var thisArtist = musicCursor.getString(artistColumn)
+                    var thisAlbum = musicCursor.getString(albumColumn)
+                    thisArtist = if (!temp.contains(thisArtist)) thisArtist else application.getString(R.string.unknowArtist)
+                    thisAlbum = if (!temp.contains(thisAlbum)) thisAlbum else application.getString(R.string.unknowAlbum)
                     list.add(
                         Song(
                             thisId,

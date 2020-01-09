@@ -6,4 +6,5 @@
     <attr name="colorMusicNote" format="reference"/>
     <attr name="colorEditTextColor" format="reference"/>
     <attr name="colorTextColorHint" format="reference"/>
+    <attr name="colorDivider" format="reference"/>
 </resources>

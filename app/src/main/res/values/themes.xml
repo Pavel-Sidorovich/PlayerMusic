@@ -12,6 +12,7 @@
         <item name="colorMusicNote">@color/color_music_note</item>
         <item name="colorEditTextColor">@color/color_background_day</item>
         <item name="colorTextColorHint">@color/color_author_day</item>
+        <item name="colorDivider">@color/color_author_day</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">

@@ -3,6 +3,7 @@ package com.pavesid.playermusic.utils
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.annotation.AttrRes
+import androidx.annotation.StringRes
 
 object Utils {
     fun getColorFromAttr(

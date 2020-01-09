@@ -10,6 +10,8 @@
     <string name="recent">Недавние</string>
     <string name="favorites">Избранные</string>
     <string name="playlists">Плейлисты</string>
+    <string name="unknowArtist">Неизвестный артист</string>
+    <string name="unknowAlbum">Неизвестный альбом</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

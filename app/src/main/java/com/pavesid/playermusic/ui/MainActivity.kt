@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.pavesid.playermusic.MainFragment
 import com.pavesid.playermusic.R
-import kotlinx.android.synthetic.main.activity_main2.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.system.exitProcess
 
 
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("M_Main", "0")
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.activity_main)
         Log.d("M_Main", "1")
         if(!checkPermission()) {
             requestPermission()

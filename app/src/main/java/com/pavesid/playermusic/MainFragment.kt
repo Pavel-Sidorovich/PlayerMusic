@@ -1,6 +1,7 @@
 package com.pavesid.playermusic
 
 import android.content.*
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlin.system.exitProcess
 
-class MainFragment : Fragment(), MediaController.MediaPlayerControl {
+class MainFragment : Fragment() {
     var songList: ArrayList<Song> = arrayListOf()
     private var musicService: MusicService? = null
     private var playIntent: Intent? = null
@@ -86,16 +87,28 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
         Log.d("M_MainFr", "22")
 
         songAdapter = SongAdapter {
+//            musicService!!.setSong(it)
             musicService!!.playSong(it)
+            if(playbackPaused){
+                setController()
+                playbackPaused=false
+            }
+            controller!!.show(0)
         }
         Log.d("M_MainFr", "23")
         songAdapter.updateData(songList)
         Log.d("M_MainFr", "24")
+        val dividerItemDecorator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            MyDividerItemDecorator(resources.getDrawable(R.drawable.divider, context!!.theme))
+        } else {
+            MyDividerItemDecorator(resources.getDrawable(R.drawable.divider))
+        }
         with(view.song_list) {
             adapter = songAdapter
             Log.d("M_MainFr", "27")
             layoutManager = LinearLayoutManager(this@MainFragment.context)
             Log.d("M_MainFr", "28")
+            addItemDecoration(dividerItemDecorator)
         }
         Log.d("M_MainFr", "25")
     }
@@ -114,7 +127,7 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
             { playNext() },
             { playPrev() })
 
-        controller!!.setMediaPlayer(this)
+        controller!!.setMediaPlayer(playerControl())
         controller!!.setAnchorView(song_list)
         controller!!.isEnabled = true
     }
@@ -188,48 +201,50 @@ class MainFragment : Fragment(), MediaController.MediaPlayerControl {
         musicService!!.playPrev()
         if(playbackPaused){
             setController()
-            playbackPaused=false
+            playbackPaused = false
         }
         controller!!.show(0)
     }
 
-    override fun isPlaying(): Boolean =
-        if (musicService != null && musicBound) {
-            musicService!!.isPng()
-        } else false
+    inner class playerControl: MediaController.MediaPlayerControl {
+        override fun isPlaying(): Boolean =
+            if (musicService != null && musicBound) {
+                musicService!!.isPng()
+            } else false
 
-    override fun canSeekForward(): Boolean = true
+        override fun canSeekForward(): Boolean = true
 
-    override fun getDuration(): Int =
-        if (musicService != null && musicBound && musicService!!.isPng()) {
-            musicService!!.getDur()
-        } else 0
+        override fun getDuration(): Int =
+            if (musicService != null && musicBound && musicService!!.isPng()) {
+                musicService!!.getDur()
+            } else 0
 
-    override fun pause() {
-        playbackPaused = true
-        musicService!!.pausePlayer()
+        override fun pause() {
+            playbackPaused = true
+            musicService!!.pausePlayer()
+        }
+
+        override fun getBufferPercentage(): Int = 0
+
+        override fun seekTo(pos: Int) {
+            musicService!!.seek(pos)
+        }
+
+        override fun getCurrentPosition(): Int =
+            if (musicService != null && musicBound && musicService!!.isPng()) {
+                musicService!!.getPos()
+            } else 0
+
+        override fun canSeekBackward(): Boolean = true
+
+        override fun start() {
+            musicService!!.go()
+        }
+
+        override fun getAudioSessionId(): Int = 0
+
+        override fun canPause(): Boolean = true
     }
-
-    override fun getBufferPercentage(): Int = 0
-
-    override fun seekTo(pos: Int) {
-        musicService!!.seek(pos)
-    }
-
-    override fun getCurrentPosition(): Int =
-        if (musicService != null && musicBound && musicService!!.isPng()) {
-            musicService!!.getPos()
-        } else 0
-
-    override fun canSeekBackward(): Boolean = true
-
-    override fun start() {
-        musicService!!.go()
-    }
-
-    override fun getAudioSessionId(): Int = 0
-
-    override fun canPause(): Boolean = true
 
     override fun onPause() {
 
